@@ -1,4 +1,6 @@
 import 'package:assignment/routes/routes_name.dart';
+import 'package:assignment/view/auth-view/sign_in_view.dart';
+import 'package:assignment/view/auth-view/sign_up_view.dart';
 import 'package:flutter/material.dart';
 import '../view/add_new_notes_view.dart';
 import '../view/home_view.dart';
@@ -9,22 +11,30 @@ class Routes {
   // Method to generate routes based on the route name provided in RouteSettings
   static Route<bool?> generateRoutes(RouteSettings settings) {
     switch (settings.name) {
-    // When navigating to the Home screen
+      // When navigating to the Home screen
       case RoutesName.homeScreen:
         return _buildPageRoute(
           const HomeView(),
         );
-    // When navigating to the Add New Notes screen
+      // When navigating to the Add New Notes screen
       case RoutesName.addNewScreen:
         return _buildPageRoute(
           const AddNewNotesView(),
         );
-    // When navigating to the Splash screen
+      case RoutesName.signupScreen:
+        return _buildPageRoute(
+          const SignUpScreen(),
+        );
+      case RoutesName.signinScreen:
+        return _buildPageRoute(
+          const SignInScreen(),
+        );
+      // When navigating to the Splash screen
       case RoutesName.splashScreen:
         return _buildPageRoute(
           const SplashView(),
         );
-    // If the route name doesn't match any predefined routes, display a "No Route Found" screen
+      // If the route name doesn't match any predefined routes, display a "No Route Found" screen
       default:
         return _buildPageRoute(
           const Scaffold(

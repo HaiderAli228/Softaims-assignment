@@ -1,3 +1,5 @@
+import 'package:assignment/routes/routes.dart';
+import 'package:assignment/routes/routes_name.dart';
 import 'package:assignment/view/home_view.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +14,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Assignment',
-      home: HomeView()
+      initialRoute: RoutesName.homeScreen,
+      onGenerateRoute: Routes.generateRoutes,
     );
+
   }
 }
