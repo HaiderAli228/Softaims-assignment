@@ -47,7 +47,7 @@ class LoginScreenState extends State<LoginScreen> {
             barrierColor: Colors.white,
             builder: (context) {
               return Center(
-                child: Lottie.asset("assets/images/second.json"),
+                child: Lottie.asset("assets/images/second.json",repeat: true),
               );
             },
           );
@@ -96,7 +96,7 @@ class LoginScreenState extends State<LoginScreen> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushReplacementNamed(context, RoutesName.loginScreen);
+                      Navigator.pushReplacementNamed(context, RoutesName.createAccountScreen);
                     },
                     child: Container(
                       height: screenHeight * 0.06,
@@ -132,7 +132,7 @@ class LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         TextSpan(
-                          text: " GiveHope",
+                          text: " Softaims",
                           style: TextStyle(
                             color: AppColors.themeColor,
                             fontWeight: FontWeight.bold,
@@ -219,7 +219,7 @@ class LoginScreenState extends State<LoginScreen> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.pop(context);
+                          Navigator.pushReplacementNamed(context, RoutesName.createAccountScreen);
                         },
                         child: const Text(
                           "Sign up",

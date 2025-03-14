@@ -56,8 +56,7 @@ class CreateAccountScreenState extends State<CreateAccountScreen> {
         gravity: ToastGravity.BOTTOM,
       );
       // Navigate to login screen
-      Navigator.pushReplacementNamed(context, RoutesName.loginScreen);
-    }
+      Navigator.pushReplacementNamed(context, RoutesName.loginScreen);    }
   }
 
   @override
@@ -212,7 +211,7 @@ class CreateAccountScreenState extends State<CreateAccountScreen> {
                             ),
                             TextButton(
                               onPressed: () {
-                                Navigator.pushNamed(context, RoutesName.loginScreen);
+                                Navigator.pushReplacementNamed(context, RoutesName.loginScreen);
                               },
                               child: const Text(
                                 "Sign in",

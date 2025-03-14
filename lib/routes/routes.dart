@@ -1,40 +1,37 @@
-import 'package:assignment/routes/routes_name.dart';
-import 'package:assignment/view/auth-view/login_view.dart';
-import 'package:assignment/view/auth-view/signin_view.dart';
-import 'package:assignment/view/role-view/confirm_role_view.dart';
 import 'package:flutter/material.dart';
 import '../view/add_new_notes_view.dart';
 import '../view/home_view.dart';
+import '../view/auth-view/login_view.dart';
+import '../view/auth-view/signin_view.dart';
+import '../view/role-view/confirm_role_view.dart';
+import 'routes_name.dart';
 
-// Routes class manages app's navigation by generating routes based on RouteSettings
+/// Define the slide directions for transitions.
+enum SlideDirection {
+  fromLeft,
+  fromRight,
+  fromTop,
+  fromBottom,
+}
+
 class Routes {
   // Method to generate routes based on the route name provided in RouteSettings
   static Route<bool?> generateRoutes(RouteSettings settings) {
     switch (settings.name) {
-      // When navigating to the Home screen
       case RoutesName.homeScreen:
-        return _buildPageRoute(
-          const HomeView(),
-        );
+      // Here, you can choose the slide direction
+        return _buildPageRoute(const HomeView(), direction: SlideDirection.fromBottom);
       case RoutesName.confirmScreen:
-        return _buildPageRoute(
-          const ConfirmRole(),
-        );
-      // When navigating to the Add New Notes screen
+        return _buildPageRoute(const ConfirmRole(), direction: SlideDirection.fromTop);
       case RoutesName.addNewScreen:
-        return _buildPageRoute(
-          const AddNewNotesView(),
-        );
+        return _buildPageRoute(const AddNewNotesView(), direction: SlideDirection.fromBottom);
       case RoutesName.loginScreen:
-        return _buildPageRoute(
-          const LoginScreen(),
-        );
- case RoutesName.createAccountScreen:
+        return _buildPageRoute(const LoginScreen(), direction: SlideDirection.fromBottom);
+      case RoutesName.createAccountScreen:
         return _buildPageRoute(
           const CreateAccountScreen(name: "Haider", role: UserRole.user),
+          direction: SlideDirection.fromBottom,
         );
-
-      // If the route name doesn't match any predefined routes, display a "No Route Found" screen
       default:
         return _buildPageRoute(
           const Scaffold(
@@ -45,35 +42,50 @@ class Routes {
               ),
             ),
           ),
+          direction: SlideDirection.fromBottom,
         );
     }
   }
+        // Combine a FadeTransition for smoothness with the SlideTransition.
 
-  // Helper method to build a PageRoute with custom slide transition animation
-  static PageRouteBuilder<bool?> _buildPageRoute(Widget page) {
+  static PageRouteBuilder<bool?> _buildPageRoute(Widget page, {SlideDirection direction = SlideDirection.fromBottom}) {
+    // Determine the start offset based on the direction.
+    Offset begin;
+    switch (direction) {
+      case SlideDirection.fromTop:
+        begin = const Offset(0, -1);
+        break;
+      case SlideDirection.fromLeft:
+        begin = const Offset(-1, 0);
+        break;
+      case SlideDirection.fromRight:
+        begin = const Offset(1, 0);
+        break;
+      case SlideDirection.fromBottom:
+      default:
+        begin = const Offset(0, 1);
+        break;
+    }
+
     return PageRouteBuilder<bool?>(
-      // Specifies the widget to display when the route is pushed
+      // Increase the transition duration here
+      transitionDuration: const Duration(milliseconds: 800),
       pageBuilder: (context, animation, secondaryAnimation) => page,
-      // Defines how the transition animation will behave
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(1.0, 0.0); // Animation starts from the right edge
-        const end = Offset.zero; // Ends in the current view position
-        const curve = Curves.easeInOut; // Specifies the curve of the animation
+        // Define a tween that interpolates from the begin offset to zero.
+        final offsetTween = Tween(begin: begin, end: Offset.zero)
+            .chain(CurveTween(curve: Curves.easeInOutCubic));
 
-        // Tween defines the range of the animation from the start to end
-        final tween = Tween(begin: begin, end: end);
-        // CurvedAnimation adds smoothness to the transition based on the curve
-        final curvedAnimation = CurvedAnimation(
-          parent: animation,
-          curve: curve,
-        );
-
-        // SlideTransition applies the sliding animation to the child widget
-        return SlideTransition(
-          position: tween.animate(curvedAnimation),
-          child: child,
+        // Combine a FadeTransition for smoothness with the SlideTransition.
+        return FadeTransition(
+          opacity: animation,
+          child: SlideTransition(
+            position: animation.drive(offsetTween),
+            child: child,
+          ),
         );
       },
     );
   }
+
 }
