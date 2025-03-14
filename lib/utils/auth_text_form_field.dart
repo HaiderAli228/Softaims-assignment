@@ -9,8 +9,10 @@ class CustomTextField extends StatelessWidget {
   final IconData? suffixIconIs;
   final IconData? prefixIconIs;
   final FocusNode focusNode;
+  final bool? obscureTextIs;
   final FocusNode? nextFocusNode;
   final validator.FormFieldValidator<String>? fieldValidator;
+  final VoidCallback? onSuffixIconTap; // callback when suffix icon tapped
 
   const CustomTextField({
     super.key,
@@ -18,15 +20,18 @@ class CustomTextField extends StatelessWidget {
     required this.keyboardApperanceType,
     this.hintTextIs,
     this.suffixIconIs,
+    this.obscureTextIs,
     this.prefixIconIs,
     required this.focusNode,
     this.nextFocusNode,
     this.fieldValidator,
+    this.onSuffixIconTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      key: ValueKey(obscureTextIs), // forces rebuild when obscureTextIs changes
       controller: controllerIs,
       keyboardType: keyboardApperanceType,
       validator: fieldValidator,
@@ -46,20 +51,28 @@ class CustomTextField extends StatelessWidget {
         hintStyle: const TextStyle(color: Colors.grey, fontFamily: "Poppins"),
         filled: true,
         fillColor: AppColors.lightColor,
-        suffixIcon: Icon(
-          suffixIconIs,
-          color: Colors.grey,
-        ),
-        prefixIcon: Icon(
+        suffixIcon: suffixIconIs != null
+            ? InkWell(
+          onTap: onSuffixIconTap,
+          child: Icon(
+            suffixIconIs,
+            color: Colors.grey,
+          ),
+        )
+            : null,
+        prefixIcon: prefixIconIs != null
+            ? Icon(
           prefixIconIs,
           color: Colors.grey,
-        ),
+        )
+            : null,
         enabledBorder: _buildBorder(AppColors.lightColor),
         focusedBorder: _buildBorder(AppColors.lightColor),
         errorBorder: _buildBorder(AppColors.lightColor),
         focusedErrorBorder: _buildBorder(AppColors.lightColor),
-        errorStyle: const TextStyle(height: 0), // To hide error text below field if needed
+        errorStyle: const TextStyle(height: 0),
       ),
+      obscureText: obscureTextIs ?? false,
     );
   }
 

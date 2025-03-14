@@ -27,6 +27,7 @@ class CreateAccountScreenState extends State<CreateAccountScreen> {
   final _emailFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
   final _confirmPasswordFocusNode = FocusNode();
+  bool _isPasswordVisible = false; // Toggle variable
 
   @override
   void dispose() {
@@ -148,8 +149,16 @@ class CreateAccountScreenState extends State<CreateAccountScreen> {
                       keyboardApperanceType: TextInputType.emailAddress,
                       nextFocusNode: _confirmPasswordFocusNode,
                       controllerIs: _passwordController,
-                      suffixIconIs: Icons.visibility_off,
+                      suffixIconIs: _isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
                       prefixIconIs: Icons.lock,
+                      obscureTextIs: !_isPasswordVisible,
+                      onSuffixIconTap: () {
+                        setState(() {
+                          _isPasswordVisible = !_isPasswordVisible;
+                        });
+                      },
                     ),
                     SizedBox(height: screenHeight * 0.02),
                     // Confirm Password Input
@@ -170,8 +179,16 @@ class CreateAccountScreenState extends State<CreateAccountScreen> {
                       keyboardApperanceType: TextInputType.emailAddress,
                       focusNode: _confirmPasswordFocusNode,
                       controllerIs: _confirmPasswordController,
-                      suffixIconIs: Icons.visibility_off,
+                      suffixIconIs: _isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
                       prefixIconIs: Icons.lock,
+                      obscureTextIs: !_isPasswordVisible,
+                      onSuffixIconTap: () {
+                        setState(() {
+                          _isPasswordVisible = !_isPasswordVisible;
+                        });
+                      },
                     ),
                     SizedBox(height: screenHeight * 0.05),
                     // Create Account Button

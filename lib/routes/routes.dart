@@ -1,3 +1,4 @@
+import 'package:assignment/view/splash_screen.dart';
 import 'package:flutter/material.dart';
 import '../view/add_new_notes_view.dart';
 import '../view/home_view.dart';
@@ -23,6 +24,8 @@ class Routes {
         return _buildPageRoute(const HomeView(), direction: SlideDirection.fromBottom);
       case RoutesName.confirmScreen:
         return _buildPageRoute(const ConfirmRole(), direction: SlideDirection.fromTop);
+      case RoutesName.splashScreen:
+        return _buildPageRoute(const SplashScreen());
       case RoutesName.addNewScreen:
         return _buildPageRoute(const AddNewNotesView(), direction: SlideDirection.fromBottom);
       case RoutesName.loginScreen:

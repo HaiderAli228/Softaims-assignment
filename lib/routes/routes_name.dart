@@ -4,4 +4,5 @@ class RoutesName {
   static const String loginScreen = "login_screen";
   static const String createAccountScreen = "create_account_screen";
   static const String confirmScreen = "confirm_screen";
+  static const String splashScreen = "splash_screen";
 }

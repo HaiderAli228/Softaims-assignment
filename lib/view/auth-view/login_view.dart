@@ -9,7 +9,6 @@ import '../../utils/app_colors.dart';
 import '../../utils/auth_text_form_field.dart';
 import '../../utils/small_widgets.dart';
 
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -23,6 +22,7 @@ class LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   final _emailFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
+  bool _isPasswordVisible = false; // Toggle variable
 
   @override
   void dispose() {
@@ -47,7 +47,7 @@ class LoginScreenState extends State<LoginScreen> {
             barrierColor: Colors.white,
             builder: (context) {
               return Center(
-                child: Lottie.asset("assets/images/second.json",repeat: true),
+                child: Lottie.asset("assets/images/second.json", repeat: true),
               );
             },
           );
@@ -96,7 +96,8 @@ class LoginScreenState extends State<LoginScreen> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushReplacementNamed(context, RoutesName.createAccountScreen);
+                      Navigator.pushReplacementNamed(
+                          context, RoutesName.createAccountScreen);
                     },
                     child: Container(
                       height: screenHeight * 0.06,
@@ -106,7 +107,8 @@ class LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       padding: const EdgeInsets.all(8),
-                      child: const Icon(Icons.arrow_back, color: AppColors.themeColor),
+                      child: const Icon(Icons.arrow_back,
+                          color: AppColors.themeColor),
                     ),
                   ),
                   SizedBox(height: screenHeight * 0.08),
@@ -125,7 +127,8 @@ class LoginScreenState extends State<LoginScreen> {
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: "Join the movement for change. Sign in to make impact on",
+                          text:
+                              "Join the movement for change. Sign in to make impact on",
                           style: TextStyle(
                             color: Colors.black,
                             fontFamily: "Poppins",
@@ -161,13 +164,23 @@ class LoginScreenState extends State<LoginScreen> {
                   CustomTextField(
                     fieldValidator: MultiValidator([
                       RequiredValidator(errorText: "Password required"),
-                      MinLengthValidator(8, errorText: "Password must be at least 8 characters long"),
+                      MinLengthValidator(8,
+                          errorText:
+                              "Password must be at least 8 characters long"),
                     ]).call,
                     focusNode: _passwordFocusNode,
                     keyboardApperanceType: TextInputType.emailAddress,
                     controllerIs: _passwordController,
-                    suffixIconIs: Icons.visibility_off,
+                    suffixIconIs: _isPasswordVisible
+                        ? Icons.visibility
+                        : Icons.visibility_off,
                     prefixIconIs: Icons.lock,
+                    obscureTextIs: !_isPasswordVisible,
+                    onSuffixIconTap: () {
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible;
+                      });
+                    },
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -219,7 +232,8 @@ class LoginScreenState extends State<LoginScreen> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.pushReplacementNamed(context, RoutesName.createAccountScreen);
+                          Navigator.pushReplacementNamed(
+                              context, RoutesName.createAccountScreen);
                         },
                         child: const Text(
                           "Sign up",

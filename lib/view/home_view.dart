@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:lottie/lottie.dart';
 import '../data/local/database.dart';
 import '../utils/app_colors.dart';
 import '../utils/toast_msg.dart';
@@ -340,13 +341,13 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                     );
                   },
                 ))
-                    : const Column(
+                    : Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Lottie.asset("assets/lottie/second.json",
-                    //     height: 200, width: 200),
-                    Text(
+                    Lottie.asset("assets/images/noitem.json",
+                        ),
+                    const Text(
                       "No Notes Found",
                       style: TextStyle(
                         fontFamily: "Poppins",
