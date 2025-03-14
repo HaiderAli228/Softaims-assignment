@@ -1,18 +1,23 @@
-import 'package:assignment/routes/routes_name.dart';
-import 'package:assignment/utils/app_colors.dart';
-import 'package:assignment/utils/auth_text_form_field.dart';
-import 'package:assignment/utils/small_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:lottie/lottie.dart';
 
-class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+import '../../data/auth-info/shared_pref_service.dart';
+import '../../routes/routes_name.dart';
+import '../../utils/app_colors.dart';
+import '../../utils/auth_text_form_field.dart';
+import '../../utils/small_widgets.dart';
+
+
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  SignInScreenState createState() => SignInScreenState();
+  LoginScreenState createState() => LoginScreenState();
 }
 
-class SignInScreenState extends State<SignInScreen> {
+class LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -23,17 +28,60 @@ class SignInScreenState extends State<SignInScreen> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
     super.dispose();
+  }
+
+  Future<void> _login() async {
+    if (_formKey.currentState!.validate()) {
+      SharedPrefService sharedPrefService = SharedPrefService();
+      final user = await sharedPrefService.getUser();
+      if (user != null) {
+        if (user["email"] == _emailController.text &&
+            user["password"] == _passwordController.text) {
+          // Show the Lottie animation in a dialog
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            barrierColor: Colors.white,
+            builder: (context) {
+              return Center(
+                child: Lottie.asset("assets/images/second.json"),
+              );
+            },
+          );
+
+          // Wait for the animation to finish (or a fixed delay)
+          await Future.delayed(const Duration(seconds: 2));
+
+          // Close the dialog
+          Navigator.pop(context);
+
+          // Navigate to the home screen
+          Navigator.pushReplacementNamed(context, RoutesName.homeScreen);
+        } else {
+          Fluttertoast.showToast(
+            msg: "Invalid email or password",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+          );
+        }
+      } else {
+        Fluttertoast.showToast(
+          msg: "No user found. Please create an account.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+        );
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // Retrieve screen size information
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-
-    // Define the padding value based on screen width to make it more responsive
-    final paddingValue = screenWidth * 0.04; // 4% of screen width
+    final paddingValue = screenWidth * 0.04;
 
     return Scaffold(
       backgroundColor: AppColors.backgroundBodyColor,
@@ -48,19 +96,17 @@ class SignInScreenState extends State<SignInScreen> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushReplacementNamed(
-                          context, RoutesName.signupScreen);
+                      Navigator.pushReplacementNamed(context, RoutesName.loginScreen);
                     },
                     child: Container(
-                      height: screenHeight * 0.06, // Dynamic height
-                      width: screenHeight * 0.06, // Dynamic width
+                      height: screenHeight * 0.06,
+                      width: screenHeight * 0.06,
                       decoration: BoxDecoration(
                         color: AppColors.themeColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       padding: const EdgeInsets.all(8),
-                      child: const Icon(Icons.arrow_back,
-                          color: AppColors.themeColor),
+                      child: const Icon(Icons.arrow_back, color: AppColors.themeColor),
                     ),
                   ),
                   SizedBox(height: screenHeight * 0.08),
@@ -76,11 +122,10 @@ class SignInScreenState extends State<SignInScreen> {
                     ),
                   ),
                   RichText(
-                    text: const TextSpan(
+                    text: TextSpan(
                       children: [
                         TextSpan(
-                          text:
-                          "Join the movement for change. Sign in to make impact on",
+                          text: "Join the movement for change. Sign in to make impact on",
                           style: TextStyle(
                             color: Colors.black,
                             fontFamily: "Poppins",
@@ -116,8 +161,7 @@ class SignInScreenState extends State<SignInScreen> {
                   CustomTextField(
                     fieldValidator: MultiValidator([
                       RequiredValidator(errorText: "Password required"),
-                      MinLengthValidator(8,
-                          errorText: "Password must be at least 8 characters long"),
+                      MinLengthValidator(8, errorText: "Password must be at least 8 characters long"),
                     ]).call,
                     focusNode: _passwordFocusNode,
                     keyboardApperanceType: TextInputType.emailAddress,
@@ -129,7 +173,7 @@ class SignInScreenState extends State<SignInScreen> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
-                       onPressed: (){},
+                        onPressed: () {},
                         child: const Text(
                           "Forget password",
                           style: TextStyle(
@@ -142,14 +186,9 @@ class SignInScreenState extends State<SignInScreen> {
                   ),
                   SizedBox(height: screenHeight * 0.05),
                   InkWell(
-                    onTap: () {
-                      if (_formKey.currentState!.validate()) {
-                        Navigator.pushReplacementNamed(
-                            context, RoutesName.homeScreen);
-                      }
-                    },
+                    onTap: _login,
                     child: Container(
-                      height: screenHeight * 0.07, // Dynamic height
+                      height: screenHeight * 0.07,
                       width: double.infinity,
                       alignment: Alignment.center,
                       padding: const EdgeInsets.all(6),

@@ -132,7 +132,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
         backgroundColor: AppColors.themeColor,
         centerTitle: true,
         title: const Text(
-          "NoteBook",
+          "Softaims NoteBook",
           style: TextStyle(
             color: AppColors.themeTextColor,
             fontSize: 18,

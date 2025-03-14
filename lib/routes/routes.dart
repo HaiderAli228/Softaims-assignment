@@ -1,10 +1,10 @@
 import 'package:assignment/routes/routes_name.dart';
-import 'package:assignment/view/auth-view/sign_in_view.dart';
-import 'package:assignment/view/auth-view/sign_up_view.dart';
+import 'package:assignment/view/auth-view/login_view.dart';
+import 'package:assignment/view/auth-view/signin_view.dart';
+import 'package:assignment/view/role-view/confirm_role_view.dart';
 import 'package:flutter/material.dart';
 import '../view/add_new_notes_view.dart';
 import '../view/home_view.dart';
-import '../view/splash_view.dart';
 
 // Routes class manages app's navigation by generating routes based on RouteSettings
 class Routes {
@@ -16,24 +16,24 @@ class Routes {
         return _buildPageRoute(
           const HomeView(),
         );
+      case RoutesName.confirmScreen:
+        return _buildPageRoute(
+          const ConfirmRole(),
+        );
       // When navigating to the Add New Notes screen
       case RoutesName.addNewScreen:
         return _buildPageRoute(
           const AddNewNotesView(),
         );
-      case RoutesName.signupScreen:
+      case RoutesName.loginScreen:
         return _buildPageRoute(
-          const SignUpScreen(),
+          const LoginScreen(),
         );
-      case RoutesName.signinScreen:
+ case RoutesName.createAccountScreen:
         return _buildPageRoute(
-          const SignInScreen(),
+          const CreateAccountScreen(name: "Haider", role: UserRole.user),
         );
-      // When navigating to the Splash screen
-      case RoutesName.splashScreen:
-        return _buildPageRoute(
-          const SplashView(),
-        );
+
       // If the route name doesn't match any predefined routes, display a "No Route Found" screen
       default:
         return _buildPageRoute(

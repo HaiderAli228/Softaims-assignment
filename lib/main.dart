@@ -1,6 +1,5 @@
 import 'package:assignment/routes/routes.dart';
 import 'package:assignment/routes/routes_name.dart';
-import 'package:assignment/view/home_view.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Assignment',
-      initialRoute: RoutesName.homeScreen,
+      initialRoute: RoutesName.createAccountScreen,
       onGenerateRoute: Routes.generateRoutes,
     );
 
