@@ -6,7 +6,14 @@ class SharedPrefService {
   static const String keyName = "user_name";
   static const String keyRole = "user_role";
 
-  Future<void> saveUser(String email, String password, String name, String role) async {
+  /// Save user information.
+  /// For Google Sign-In (if no name/role is available), you can pass empty strings.
+  Future<void> saveUser({
+    required String email,
+    required String password,
+    String name = "",
+    String role = "",
+  }) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(keyEmail, email);
     await prefs.setString(keyPassword, password);
@@ -14,20 +21,36 @@ class SharedPrefService {
     await prefs.setString(keyRole, role);
   }
 
+  /// Retrieve user information.
   Future<Map<String, String>?> getUser() async {
     final prefs = await SharedPreferences.getInstance();
     final email = prefs.getString(keyEmail);
     final password = prefs.getString(keyPassword);
     final name = prefs.getString(keyName);
     final role = prefs.getString(keyRole);
-    if (email != null && password != null && name != null && role != null) {
+    if (email != null && password != null) {
       return {
         "email": email,
         "password": password,
-        "name": name,
-        "role": role,
+        "name": name ?? "",
+        "role": role ?? "",
       };
     }
     return null;
+  }
+
+  /// Check if a user is registered.
+  Future<bool> isUserRegistered() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.containsKey(keyEmail) && prefs.containsKey(keyPassword);
+  }
+
+  /// Clear user information (for logout).
+  Future<void> clearUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(keyEmail);
+    await prefs.remove(keyPassword);
+    await prefs.remove(keyName);
+    await prefs.remove(keyRole);
   }
 }

@@ -3,17 +3,18 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../data/auth-info/shared_pref_service.dart';
+import '../../data/google-signin/google_signin.dart';
 import '../../routes/routes_name.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/auth_text_form_field.dart';
 import '../../utils/small_widgets.dart';
 import '../role-view/confirm_role_view.dart';
 
-
 class CreateAccountScreen extends StatefulWidget {
   final String name;
   final UserRole role;
-  const CreateAccountScreen({Key? key, required this.name, required this.role}) : super(key: key);
+  const CreateAccountScreen({Key? key, required this.name, required this.role})
+      : super(key: key);
 
   @override
   CreateAccountScreenState createState() => CreateAccountScreenState();
@@ -42,22 +43,20 @@ class CreateAccountScreenState extends State<CreateAccountScreen> {
 
   Future<void> _createAccount() async {
     if (_formKey.currentState!.validate()) {
-      // Save user info to shared preferences
       SharedPrefService sharedPrefService = SharedPrefService();
       await sharedPrefService.saveUser(
-        _emailController.text,
-        _passwordController.text,
-        widget.name,
-        widget.role.toString(),
+        email: _emailController.text,
+        password: _passwordController.text,
+        name: widget.name,
+        role: widget.role.toString(),
       );
-      // Show success toast
       Fluttertoast.showToast(
         msg: "Account created successfully. Please sign in.",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
       );
-      // Navigate to login screen
-      Navigator.pushReplacementNamed(context, RoutesName.loginScreen);    }
+      Navigator.pushReplacementNamed(context, RoutesName.loginScreen);
+    }
   }
 
   @override
@@ -111,7 +110,8 @@ class CreateAccountScreenState extends State<CreateAccountScreen> {
                             ),
                           ),
                           const TextSpan(
-                            text: " create your account to continue with Softaims",
+                            text:
+                                " create your account to continue with Softaims",
                             style: TextStyle(
                               fontSize: 16,
                               color: Colors.black,
@@ -143,7 +143,8 @@ class CreateAccountScreenState extends State<CreateAccountScreen> {
                       fieldValidator: MultiValidator([
                         RequiredValidator(errorText: "Password required"),
                         MinLengthValidator(8,
-                            errorText: "Password must be at least 8 characters long")
+                            errorText:
+                                "Password must be at least 8 characters long")
                       ]).call,
                       focusNode: _passwordFocusNode,
                       keyboardApperanceType: TextInputType.emailAddress,
@@ -228,7 +229,8 @@ class CreateAccountScreenState extends State<CreateAccountScreen> {
                             ),
                             TextButton(
                               onPressed: () {
-                                Navigator.pushReplacementNamed(context, RoutesName.loginScreen);
+                                Navigator.pushReplacementNamed(
+                                    context, RoutesName.loginScreen);
                               },
                               child: const Text(
                                 "Sign in",
@@ -243,7 +245,12 @@ class CreateAccountScreenState extends State<CreateAccountScreen> {
                         const SizedBox(height: 20),
                         ElevatedButton.icon(
                           onPressed: () {
-                            // Implement Google Sign In if needed
+                            // Implement Google Sign-in
+                            handleGoogleSignIn(
+                              _emailController,
+                              _passwordController,
+                              _confirmPasswordController,
+                            );
                           },
                           icon: const Icon(Icons.login, color: Colors.black),
                           label: const Text(

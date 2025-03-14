@@ -1,13 +1,12 @@
 import 'package:google_sign_in/google_sign_in.dart';
-import '../auth-info/shared_pref_manager.dart';
+import '../auth-info/shared_pref_service.dart'; // Use the unified service
 import 'package:flutter/material.dart';
 
-// Configure your GoogleSignIn instance; include clientId if necessary.
+// Configure GoogleSignIn (remove clientId for Android)
 GoogleSignIn _googleSignIn = GoogleSignIn(
   scopes: ['email'],
-  // Uncomment and set if required:
-  clientId: '858621757108-pdhd3c1qgo2rsphi6cg4i2qr3tdjpnv8.apps.googleusercontent.com',
-  //858621757108-pdhd3c1qgo2rsphi6cg4i2qr3tdjpnv8.apps.googleusercontent.com
+  // For web, uncomment and provide your web client ID:
+  // clientId: 'YOUR_WEB_CLIENT_ID',
 );
 
 Future<void> handleGoogleSignIn(
@@ -18,22 +17,27 @@ Future<void> handleGoogleSignIn(
   try {
     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
     if (googleUser == null) {
-      // User canceled the sign-in
+      // User canceled the sign-in.
       return;
     }
-    // If sign-in is successful, get the email.
+    // Get the email from the Google account.
     String email = googleUser.email;
-    // Since Google Sign-In doesn’t provide a password,
-    // assign a default or prompt the user to set one.
-    String defaultPassword = "defaultPassword"; // For demo only
+    // Since Google Sign-In does not provide a password,
+    // assign a default value (for demo purposes only).
+    String defaultPassword = "defaultPassword";
 
     // Autofill the text fields.
     emailController.text = email;
     passwordController.text = defaultPassword;
     confirmPasswordController.text = defaultPassword;
 
-    // Save user information to Shared Preferences.
-    await SharedPrefManager.saveUserInfo(email, defaultPassword);
+    // Save user information using the unified SharedPrefService.
+    await SharedPrefService().saveUser(
+      email: email,
+      password: defaultPassword,
+      name: "",
+      role: "",
+    );
   } catch (error) {
     print("Google sign in error: $error");
   }

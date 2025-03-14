@@ -197,7 +197,7 @@ class LoginScreenState extends State<LoginScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: screenHeight * 0.05),
+                  SizedBox(height: screenHeight * 0.03),
                   InkWell(
                     onTap: _login,
                     child: Container(
